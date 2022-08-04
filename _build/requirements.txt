@@ -1,0 +1,17 @@
+certifi
+flatdict
+jmespath
+linode_api4
+LogDNA
+logstash
+memcache
+prettytable
+python-gitlab
+redis
+requests
+openshift
+PyYAML
+kubernetes>=12.0.0
+requests-oauthlib
+jsonpatch
+hcloud>=1.0.0

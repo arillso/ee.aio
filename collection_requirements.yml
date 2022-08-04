@@ -1,0 +1,28 @@
+- name: Build custom requirements.txt
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    req_list: []
+  tasks:
+  - name: Import requirements.yml to use collections list
+    include_vars: ./_build/requirements.yml
+
+  - set_fact:
+      req_list: "{{ req_list + lookup('file', req_path).split('\n') | select() }}"
+    loop: "{{ collection_paths }}"
+    vars:
+      collection_paths: "{{ collections | product(['.txt']) | map('join') | list }}"
+      req_path: "./collection_requirements/{{ item }}"
+
+
+  - name: Add contents of each collections python dependencies to requirements.txt
+    lineinfile:
+      path: ./_build/requirements.txt
+      line: "{{ item | replace(ee, gt) }}"
+      create: yes
+      firstmatch: yes
+    loop: "{{ req_list }}"
+    vars:
+      ee: '=='
+      gt: '<='
